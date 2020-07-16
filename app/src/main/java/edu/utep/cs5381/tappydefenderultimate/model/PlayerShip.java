@@ -2,48 +2,50 @@ package edu.utep.cs5381.tappydefenderultimate.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
-import edu.utep.cs5381.tappydefenderultimate.R;
+public class PlayerShip extends Ship {
 
-public class PlayerShip {
-    private final Bitmap bitmap;
-    private int speed;
-    private int x;
-    private int y;
+    // GRAVITY is the falling rate for our player
     private static final int GRAVITY = -12;
+    // Limits of range for our speed.
     private static final int MIN_SPEED = 1;
     private static final int MAX_SPEED = 20;
 
+    // Flag for accelerating and rising functionality in game
     private boolean boosting;
 
+    // Range of our screen
     private int maxY;
     private int minY;
 
-    private Rect hitbox;
 
     public void setBoosting(boolean flag) {
         boosting = flag;
     }
 
-    public PlayerShip(Context context, int width, int height) {
+    public PlayerShip(Context context, int screenWidth, int screenHeight, Bitmap bitmap) {
+        super(context, screenWidth, screenHeight, bitmap);
+        // Player starts here always.
         this.x = 50;
         this.y = 50;
         speed = 1;
-        bitmap = BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.ship);
-        maxY = height - bitmap.getHeight();
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+        this.bitmap = bitmap;
+        maxY = screenHeight - this.bitmap.getHeight();
         minY = 0;
-        hitbox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        this.hitbox = new Rect(x, y, this.bitmap.getWidth(), this.bitmap.getHeight());
     }
 
-    public void update() {
+    public void update(int s) {
+        // increment speed while boosting
         if (boosting) {
             speed += 2;
         } else {
             speed -= 5;
         }
+        // assert speed limits
         if (speed < MIN_SPEED) {
             speed = MIN_SPEED;
         }
@@ -51,6 +53,7 @@ public class PlayerShip {
             speed = MAX_SPEED;
         }
 
+        // algo for the falling
         y -= speed + GRAVITY;
         if (y < minY) {
             y = minY;
@@ -59,25 +62,5 @@ public class PlayerShip {
             y = maxY;
         }
         hitbox.set(x, y, x + bitmap.getWidth(), y + bitmap.getHeight());
-    }
-
-    public Rect getHitbox() {
-        return hitbox;
-    }
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 }

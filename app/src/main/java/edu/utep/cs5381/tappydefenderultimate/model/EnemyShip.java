@@ -2,52 +2,32 @@ package edu.utep.cs5381.tappydefenderultimate.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
-import java.util.Random;
+public class EnemyShip extends Ship{
 
-import edu.utep.cs5381.tappydefenderultimate.R;
-
-public class EnemyShip {
-
-    private static final Random random = new Random();
-
-    private Bitmap bitmap;
-    private int x, y;
-    private int speed = 1;
     private int maxX, minX; // move horizontally from right to left
     private int maxY, minY;
-    private Rect hitbox;
 
-    public EnemyShip(Context ctx, int screenX, int screenY){
-        bitmap = BitmapFactory.decodeResource(ctx.getResources(), R.drawable.enemy);
+    public EnemyShip(Context ctx, int screenX, int screenY, Bitmap bitmap){
+        super(ctx, screenX, screenY, bitmap);
         maxX = screenX;
         maxY = screenY;
         minX = 0;
         minY = 0;
-       resetShip();
+        this.bitmap = bitmap;
         hitbox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        resetShip();
     }
 
     public void update(int playerSpeed) {
         x -= playerSpeed;
         x -= speed;
-        // Improve this. duplicate code. refactor it
+        // What happens when our ship reaches the end of the screen.
         if (x < minX - bitmap.getWidth()) {
             resetShip();
         }
         hitbox.set(x, y, x + bitmap.getWidth(), y + bitmap.getHeight());
-    }
-
-    public Bitmap getBitmap() {  return bitmap; }
-
-    public int getX() { return x; }
-
-    public int getY() { return y; }
-
-    public Rect getHitBox() {
-        return hitbox;
     }
 
     public void resetShip() {

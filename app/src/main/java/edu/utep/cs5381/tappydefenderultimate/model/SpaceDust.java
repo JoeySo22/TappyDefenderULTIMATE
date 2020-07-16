@@ -2,17 +2,18 @@ package edu.utep.cs5381.tappydefenderultimate.model;
 
 import android.content.Context;
 
-import java.util.Random;
+public class SpaceDust extends GameObject{
 
-public class SpaceDust {
+    // Radius is for the size of our starts. Some are smaller and slower and others are faster and bigger
+    private int maxX, maxY, radius;
 
-    private int x, y, maxX, maxY, speed, radius;
-    private static final Random random = new Random();
-
-    // This class has similarities with EnemyShip.
     public SpaceDust(Context context,int screenX, int screenY) {
+        super(context, screenX, screenY);
         maxX = screenX;
         maxY = screenY;
+        /*
+            SpaceDust needs lots of random generating.
+        */
         setRandomDistance();
         setRandomSpeed();
         setRandomHeight();
@@ -27,9 +28,13 @@ public class SpaceDust {
         speed = random.nextInt(3) + 10;
     }
 
-    //
-    public void update() {
+    private void setRandomHeight() {
+        y = random.nextInt(maxY);
+    }
+
+    public void update(int playerSpeed) {
         x -= speed;
+        // The resetting functionality for resetting our stars.
         if (x < 0) {
             setRandomSpeed();
             x = maxX;
@@ -37,11 +42,5 @@ public class SpaceDust {
         }
     }
 
-    private void setRandomHeight() {
-        y = random.nextInt(maxY);
-    }
-
-    public int getX() { return x; }
-    public int getY() { return y; }
     public int getRadius() { return radius; }
 }
