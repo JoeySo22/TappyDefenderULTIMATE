@@ -19,6 +19,8 @@ public class PlayerShip extends Ship {
     private int maxY;
     private int minY;
 
+    // Shield record. Lose all of these and you lose
+    private int shieldStrength;
 
     public void setBoosting(boolean flag) {
         boosting = flag;
@@ -36,6 +38,7 @@ public class PlayerShip extends Ship {
         maxY = screenHeight - this.bitmap.getHeight();
         minY = 0;
         this.hitbox = new Rect(x, y, this.bitmap.getWidth(), this.bitmap.getHeight());
+        this.shieldStrength = 3;
     }
 
     public void update(int s) {
@@ -62,5 +65,14 @@ public class PlayerShip extends Ship {
             y = maxY;
         }
         hitbox.set(x, y, x + bitmap.getWidth(), y + bitmap.getHeight());
+    }
+
+    public int getShieldStrength() {
+        return shieldStrength;
+    }
+
+    public int reduceShieldStrength() {
+        shieldStrength--;
+        return shieldStrength;
     }
 }
